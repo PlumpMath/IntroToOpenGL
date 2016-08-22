@@ -73,8 +73,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\guy.goudeau.AIE\Documents\Visual Studio 2015\Projects\IntroToOpenGL\dep\glm;C:\Users\guy.goudeau.AIE\Documents\Visual Studio 2015\Projects\IntroToOpenGL\dep\glfw\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\guy.goudeau.AIE\Documents\Visual Studio 2015\Projects\IntroToOpenGL\dep\glm;C:\Users\guy.goudeau.AIE\Documents\Visual Studio 2015\Projects\IntroToOpenGL\dep\glfw\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)dep\glm;$(SolutionDir)dep\glfw\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\dep\glfw\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -120,11 +120,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="MyApplication.h" />
     <ClInclude Include="src\Gizmos.h" />
     <ClInclude Include="src\gl_core_4_4.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MyApplication.cpp" />
     <ClCompile Include="src\Gizmos.cpp" />
     <ClCompile Include="src\gl_core_4_4.c" />
   </ItemGroup>
