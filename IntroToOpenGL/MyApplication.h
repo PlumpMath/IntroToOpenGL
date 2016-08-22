@@ -28,11 +28,13 @@ private:
 	mat4 view;
 	vec4 white;
 	vec4 yellow;
-	vec4 blue;
+	vec4 green;
 	GLFWwindow* window;
 	mat4 sun = mat4(1);
 	mat4 earth = mat4(1);
 	mat4 moon = mat4(1);
 	float angle = 0;
+	vec3 earthOffset = vec3(7, 0, 0); // distance of earth from sun
+	vec3 moonOffset = vec3(3, 0, 0); // distance of moon from earth
 
 };

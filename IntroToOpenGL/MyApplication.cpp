@@ -3,8 +3,8 @@
 Application::Application()
 {
 	white = vec4(1, 1, 1, 1);
-	yellow = vec4(1, .8, .1, 1);
-	blue = vec4(0, 0, 1, 1);
+	yellow = vec4(1, 0.8, 0.1, 1);
+	green = vec4(0.1, 0.6, 0.1, 1);
 }
 
 bool Application::startup()
@@ -52,8 +52,16 @@ bool Application::update()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		Gizmos::clear();
+		angle += .05f; // angle by which to rotate. can slow down or speed up by changing this
 
-		sun = glm::rotate(sun, (glm::mediump_float)180, glm::vec3(0, 1, 0));
+		mat4 sunRotation = glm::rotate(angle, glm::vec3(0, 1, 0)); // tell sun to rotate by an angle
+		sun = mat4(1) * sunRotation; // sun stays rotating in place
+
+		mat4 earthTransform = glm::translate(earthOffset); // tells earth to orbit sun relative to position
+		earth = sun * earthTransform * glm::rotate(angle, glm::vec3(0, 1, 0)); // makes sun move and rotate
+
+		mat4 moonTransform = glm::translate(moonOffset); // tells moon to orbit earth relative to position
+		moon = earth * moonTransform; // makes moon move
 
 		return true;
 	}
@@ -62,9 +70,9 @@ bool Application::update()
 
 void Application::draw()
 {
-	Gizmos::addSphere(vec3(sun[3][0], sun[3][1], sun[3][2]), 3, 30, 30, yellow, &sun);
-	Gizmos::addSphere(vec3(earth[3][0], earth[3][1], earth[3][2]), 1, 30, 30, blue, &earth);
-	Gizmos::addSphere(vec3(moon[3][0], moon[3][1], moon[3][2]), .5, 30, 30, white, &moon);
+	Gizmos::addSphere(vec3(sun[3]), 3, 30, 30, yellow, &sun); // create sun
+	Gizmos::addSphere(vec3(earth[3]), 1, 30, 30, green, &earth); // create earth
+	Gizmos::addSphere(vec3(moon[3]), .5, 30, 30, white, &moon); // create moon
 
 	Gizmos::draw(projection * view);
 	glfwSwapBuffers(window);
