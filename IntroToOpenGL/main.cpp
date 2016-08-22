@@ -17,7 +17,7 @@ int main()
 	if (glfwInit() == false)
 		return -1;
 
-	GLFWwindow* window = glfwCreateWindow(1280, 720, "SPAAAAAAAAAACE!", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(1280, 720, "The Milky Way", nullptr, nullptr);
 
 	if (window == nullptr)
 	{
@@ -53,29 +53,19 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		Gizmos::clear();
-
-		//Gizmos::addTransform(glm::mat4(1)); // Transform marker
-
-		//for (int i = 0; i < 21; ++i) 
-		//{
-		//	Gizmos::addLine(vec3(-10 + i, 0, 10), vec3(-10 + i, 0, -10), i == 10 ? white : black);
-		//	Gizmos::addLine(vec3(10, 0, -10 + i), vec3(-10, 0, -10 + i), i == 10 ? white : black);
-		//}
-
+		
 		vec4 white(1, 1, 1, 1);
 		vec4 black(0, 0, 0, 1);
 		vec4 yellow(1, .8, .1, 1);
 		vec4 blue(0, 0, 1, 1);
 		vec4 green(0, .8, .1, 1);
-
+		
 		vec3 bluePosition = vec3(5, 3, 1);
-		vec3 greenPosition = vec3(3, 5, 1);
-
-		model = glm::rotate(model, (glm::mediump_float)180, glm::vec3(0, 1, 0));
-
+		
+		//model = glm::rotate(model, (glm::mediump_float)180, glm::vec3(0, 1, 0));
+		
 		Gizmos::addSphere(vec3(0), 2, 30, 30, yellow);
-		Gizmos::addSphere(bluePosition, 0.5f, 20, 20, blue, &model);
-		Gizmos::addSphere(greenPosition, 0.5f, 20, 20, green, &model);
+		Gizmos::addSphere(bluePosition, 0.5f, 20, 20, blue); // add &model after color to rotate
 
 		Gizmos::draw(projection * view);
 
