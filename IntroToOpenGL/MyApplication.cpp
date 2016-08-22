@@ -32,10 +32,10 @@ bool Application::startup()
 
 	Gizmos::create(); // initializes
 
-	view = glm::lookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
-	projection = glm::perspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 1000.0f);
+	view = glm::lookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0)); // camera location
+	projection = glm::perspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 1000.0f); // camera lens
 
-	auto major = ogl_GetMajorVersion();
+	auto major = ogl_GetMajorVersion(); // Gets what version of openGL this program is running
 	auto minor = ogl_GetMinorVersion();
 	printf("GL: %i.%i\n", major, minor);
 
@@ -52,7 +52,8 @@ bool Application::update()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		Gizmos::clear();
-		angle += .05f; // angle by which to rotate. can slow down or speed up by changing this
+
+		angle += .03f; // angle by which to rotate. can slow down or speed up by changing this
 
 		mat4 sunRotation = glm::rotate(angle, glm::vec3(0, 1, 0)); // tell sun to rotate by an angle
 		sun = mat4(1) * sunRotation; // sun stays rotating in place
@@ -70,9 +71,9 @@ bool Application::update()
 
 void Application::draw()
 {
-	Gizmos::addSphere(vec3(sun[3]), 3, 30, 30, yellow, &sun); // create sun
-	Gizmos::addSphere(vec3(earth[3]), 1, 30, 30, green, &earth); // create earth
-	Gizmos::addSphere(vec3(moon[3]), .5, 30, 30, white, &moon); // create moon
+	Gizmos::addSphere(vec3(sun[3]), 3, 30, 30, yellow, &sun); // drwa sun
+	Gizmos::addSphere(vec3(earth[3]), 1, 30, 30, green, &earth); // draw earth
+	Gizmos::addSphere(vec3(moon[3]), .5, 30, 30, white, &moon); // draw moon
 
 	Gizmos::draw(projection * view);
 	glfwSwapBuffers(window);
