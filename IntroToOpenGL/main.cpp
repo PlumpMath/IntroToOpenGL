@@ -2,7 +2,7 @@
 
 int main()
 {
-	Application* theApp = new Application();
+	Application* theApp = new SolarSystem();
 	if (theApp->startup() == true) {
 		while (theApp->update() == true)
 			theApp->draw();

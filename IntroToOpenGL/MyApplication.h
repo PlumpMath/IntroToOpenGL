@@ -13,14 +13,23 @@ using glm::mat4;
 
 class Application
 {
+public:
+	virtual bool startup() = 0;
+	virtual bool update() = 0;
+	virtual void draw() = 0;
+	virtual void shutdown() = 0;
+};
+
+class SolarSystem : public Application
+{
 
 public:
 
-	Application();
-	bool startup();
-	bool update();
-	void draw();
-	void shutdown();
+	SolarSystem();
+	bool startup() override;
+	bool update() override;
+	void draw() override;
+	void shutdown() override;
 
 private:
 
@@ -30,10 +39,10 @@ private:
 	vec4 yellow;
 	vec4 green;
 	GLFWwindow* window;
-	mat4 sun = mat4(1);
-	mat4 earth = mat4(1);
-	mat4 moon = mat4(1);
-	float angle = 0;
+	mat4 sun = mat4(1); // identity matrices
+	mat4 earth = mat4(1); // ^
+	mat4 moon = mat4(1); //  ^
+	float angle = 0; // rotation angle
 	vec3 earthOffset = vec3(7, 0, 0); // distance of earth from sun
 	vec3 moonOffset = vec3(3, 0, 0); // distance of moon from earth
 

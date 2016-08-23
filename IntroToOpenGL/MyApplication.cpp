@@ -1,13 +1,13 @@
 #include "MyApplication.h"
 
-Application::Application()
+SolarSystem::SolarSystem()
 {
 	white = vec4(1, 1, 1, 1);
 	yellow = vec4(1, 0.8, 0.1, 1);
 	green = vec4(0.1, 0.6, 0.1, 1);
 }
 
-bool Application::startup()
+bool SolarSystem::startup()
 {
 
 	if (glfwInit() == false)
@@ -45,7 +45,7 @@ bool Application::startup()
 	return true;
 }
 
-bool Application::update()
+bool SolarSystem::update()
 {
 	if (glfwWindowShouldClose(window) == false && glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS)
 	{
@@ -69,7 +69,7 @@ bool Application::update()
 	return false;
 }
 
-void Application::draw()
+void SolarSystem::draw()
 {
 	Gizmos::addSphere(vec3(sun[3]), 3, 30, 30, yellow, &sun); // drwa sun
 	Gizmos::addSphere(vec3(earth[3]), 1, 30, 30, green, &earth); // draw earth
@@ -80,7 +80,7 @@ void Application::draw()
 	glfwPollEvents();
 }
 
-void Application::shutdown()
+void SolarSystem::shutdown()
 {
 	Gizmos::destroy();
 	glfwDestroyWindow(window);
