@@ -22,22 +22,22 @@ public:
 
 class SolarSystem : public Application
 {
-
 public:
-
 	SolarSystem();
 	bool startup() override;
 	bool update() override;
 	void draw() override;
 	void shutdown() override;
-
 private:
-
 	mat4 projection;
 	mat4 view;
 	vec4 white;
 	vec4 yellow;
 	vec4 green;
+	vec4 black;
+	float previousTime;
+	float currentTime;
+	float deltaTime;
 	GLFWwindow* window;
 	mat4 sun = mat4(1); // identity matrices
 	mat4 earth = mat4(1); // ^
@@ -45,5 +45,4 @@ private:
 	float angle = 0; // rotation angle
 	vec3 earthOffset = vec3(7, 0, 0); // distance of earth from sun
 	vec3 moonOffset = vec3(3, 0, 0); // distance of moon from earth
-
 };
