@@ -86,7 +86,8 @@ void SolarSystem::draw()
 	{
 		Gizmos::addLine(vec3(-10 + i, 0, 10), vec3(-10 + i, 0, -10), i == 10 ? white : black);
 		Gizmos::addLine(vec3(10, 0, -10 + i), vec3(-10, 0, -10 + i), i == 10 ? white : black);
-	}
+	}
+
 
 	Gizmos::draw(projection * view);
 	glfwSwapBuffers(window);

@@ -46,3 +46,27 @@ private:
 	vec3 earthOffset = vec3(7, 0, 0); // distance of earth from sun
 	vec3 moonOffset = vec3(3, 0, 0); // distance of moon from earth
 };
+
+class RenderGeo : public Application
+{
+public :
+	RenderGeo();
+	bool startup() override;
+	bool update() override;
+	void draw() override;
+	void shutdown() override;
+	void makePlane();
+	
+private:
+	struct Vertex 
+	{
+		vec4 position;
+		vec4 color;
+	};
+	mat4 projection;
+	mat4 view;
+	GLFWwindow* window;
+	unsigned int m_VAO; // vertex array object
+	unsigned int m_VBO; // vertex buffer object
+	unsigned int m_IBO; // index buffer object
+};
