@@ -66,7 +66,9 @@ private:
 	mat4 projection;
 	mat4 view;
 	GLFWwindow* window;
-	unsigned int m_VAO; // vertex array object
-	unsigned int m_VBO; // vertex buffer object
-	unsigned int m_IBO; // index buffer object
+	unsigned int VAO; // vertex array object
+	unsigned int VBO; // vertex buffer object
+	unsigned int IBO; // index buffer object
+	unsigned int indexCount;
+	unsigned int programID; // resulting ID of compiled shader
 };
