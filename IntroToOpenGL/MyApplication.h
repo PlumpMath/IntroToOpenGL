@@ -1,6 +1,7 @@
 #include "src\gl_core_4_4.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <fstream>
 #define GLM_SWIZZLE
 #define GLM_FORCE_PURE
 #include "src/Gizmos.h"
@@ -52,11 +53,11 @@ class RenderGeo : public Application
 public :
 	RenderGeo();
 	bool startup() override;
+	void makePlane();
+	void makeShader();
 	bool update() override;
 	void draw() override;
 	void shutdown() override;
-	void makePlane();
-	void makeShader();
 	
 private:
 	struct Vertex 
