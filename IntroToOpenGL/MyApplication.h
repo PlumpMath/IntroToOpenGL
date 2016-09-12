@@ -56,6 +56,7 @@ public :
 	void draw() override;
 	void shutdown() override;
 	void makePlane();
+	void makeShader();
 	
 private:
 	struct Vertex 
@@ -65,7 +66,9 @@ private:
 	};
 	mat4 projection;
 	mat4 view;
+	mat4 projectionViewMatrix;
 	GLFWwindow* window;
+	float time;
 	unsigned int VAO; // vertex array object
 	unsigned int VBO; // vertex buffer object
 	unsigned int IBO; // index buffer object

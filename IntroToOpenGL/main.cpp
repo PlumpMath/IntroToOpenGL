@@ -4,9 +4,11 @@ int main()
 {
 	
 	Application* theApp = new RenderGeo();
-	std::cout << "1. For SolarSystem \n2. For RenderGeo \n";
-	int input;
-	std::cin >> input;
+	//std::cout << "1. For SolarSystem \n2. For RenderGeo \n";
+	int input = 2;
+	//std::cin >> input;
+
+
 	switch (input)
 	{
 	case 1:
