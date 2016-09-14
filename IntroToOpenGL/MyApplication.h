@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <fstream>
+#include <vector>
 #define GLM_SWIZZLE
 #define GLM_FORCE_PURE
 #include "src/Gizmos.h"
@@ -53,11 +54,13 @@ class RenderGeo : public Application
 public :
 	RenderGeo();
 	bool startup() override;
-	void makePlane();
-	void makeShader();
 	bool update() override;
 	void draw() override;
 	void shutdown() override;
+	void makeShader();
+	void makePlane();
+	std::vector<vec4> makeHalfCircle(int, float);
+	void makeSphere(int, int, float);
 	
 private:
 	struct Vertex 
@@ -70,6 +73,7 @@ private:
 	mat4 projectionViewMatrix;
 	GLFWwindow* window;
 	float time;
+	float angle;
 	unsigned int VAO; // vertex array object
 	unsigned int VBO; // vertex buffer object
 	unsigned int IBO; // index buffer object

@@ -34,10 +34,48 @@ bool RenderGeo::startup()
 	glClearColor(0.25f, .25f, 0.25f, 1);
 	glEnable(GL_DEPTH_TEST); // enables the depth buffer
 
-	makePlane();
+	//makePlane();
 	makeShader();
+	makeSphere(25, 25, 5);
 
 	return true;
+}
+
+bool RenderGeo::update()
+{
+	if (glfwWindowShouldClose(window) == false && glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS)
+	{
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+
+		return true;
+	}
+	return false;
+}
+
+void RenderGeo::draw()
+{
+	/*GL_COLOR_BUFFER_BIT informs OpenGL to wipe the back - buffer colours clean.
+	GL_DEPTH_BUFFER_BIT informs it to clear the distance to the closest pixels.If we didn�t do this then
+	OpenGL may think the image of the last frame is still there and our new visuals may not display.*/
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glUseProgram(programID);
+	unsigned int projectionViewUniform = glGetUniformLocation(programID, "projectionViewWorldMatrix");
+	glUniformMatrix4fv(projectionViewUniform, 1, false, glm::value_ptr(projectionViewMatrix));
+
+	glBindVertexArray(VAO);
+	glPointSize(5.f);
+	glDrawElements(GL_POINTS, indexCount, GL_UNSIGNED_INT, 0);
+
+	glfwSwapBuffers(window);
+	glfwPollEvents();
+}
+
+void RenderGeo::shutdown()
+{
+	glfwDestroyWindow(window);
+	glfwTerminate();
 }
 
 void RenderGeo::makeShader()
@@ -128,38 +166,68 @@ void RenderGeo::makePlane()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-bool RenderGeo::update()
+std::vector<vec4> RenderGeo::makeHalfCircle(int numPoints, float radius)
 {
-	if (glfwWindowShouldClose(window) == false && glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS)
+	std::vector<vec4> halfCircle;
+	for (int i = 0; i < numPoints; i++)
 	{
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
-
-		return true;
+		angle = glm::pi<float>() * i / numPoints - 1;
+		vec4 pos = vec4(cos(angle) * radius, sin(angle) * radius, 0, 1);
+		halfCircle.push_back(pos);
 	}
-	return false;
+	return halfCircle;
 }
 
-void RenderGeo::draw()
+const int numIndices = 25;
+
+void RenderGeo::makeSphere(int numPoints, int numMeridians, float radius)
 {
-	/*GL_COLOR_BUFFER_BIT informs OpenGL to wipe the back - buffer colours clean.
-	GL_DEPTH_BUFFER_BIT informs it to clear the distance to the closest pixels.If we didn�t do this then
-	OpenGL may think the image of the last frame is still there and our new visuals may not display.*/
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	unsigned int indices[numIndices];
+	for (int i = 0; i < numIndices; i++)
+	{
+		indices[i] = i;
+	}
+	indexCount = numIndices;
+	
+	std::vector<vec4> vertices = makeHalfCircle(numPoints, radius);
 
-	glUseProgram(programID);
-	unsigned int projectionViewUniform = glGetUniformLocation(programID, "projectionViewWorldMatrix");
-	glUniformMatrix4fv(projectionViewUniform, 1, false, glm::value_ptr(projectionViewMatrix));
+	for (int i = 0; i < numMeridians; i++)
+	{
+		angle = (2 * glm::pi<float>()) * i / numMeridians;
+		for (int j = 0; j < numPoints; j++)
+		{
+			vertices[j].x = cos(angle) + vertices[j].z * sin(angle);
+		}
+	}
 
+	//generate our GL buffers, making our handles
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &IBO);
+
+	//generate VAO
+	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLE_STRIP, indexCount, GL_UNSIGNED_INT, 0);
 
-	glfwSwapBuffers(window);
-	glfwPollEvents();
-}
+	//bind the vertex buffer handle
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	//put the vertex info on the card
+	glBufferData(GL_ARRAY_BUFFER, numPoints * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
-void RenderGeo::shutdown()
-{
-	glfwDestroyWindow(window);
-	glfwTerminate();
+	//bind the index buffer handle 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	//put the index info on the card
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+
+	//position
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+
+	//color
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+
+	//safety
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
