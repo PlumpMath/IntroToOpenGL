@@ -49,6 +49,12 @@ private:
 	vec3 moonOffset = vec3(3, 0, 0); // distance of moon from earth
 };
 
+struct Vertex 
+{
+	vec4 position;
+	vec4 color;
+};
+
 class RenderGeo : public Application
 {
 public :
@@ -63,20 +69,25 @@ public :
 	void makeSphere(int, int, float);
 	
 private:
-	struct Vertex 
-	{
-		vec4 position;
-		vec4 color;
-	};
+
 	mat4 projection;
 	mat4 view;
 	mat4 projectionViewMatrix;
 	GLFWwindow* window;
-	float time;
-	float angle;
 	unsigned int VAO; // vertex array object
 	unsigned int VBO; // vertex buffer object
 	unsigned int IBO; // index buffer object
 	unsigned int indexCount;
 	unsigned int programID; // resulting ID of compiled shader
+	float time;
+	float angle;
+	float pi;
+	float phi;
+	float oldX;
+	float oldY;
+	float oldZ;
+	float newX;
+	float newY;
+	float newZ;
+	float radius;
 };

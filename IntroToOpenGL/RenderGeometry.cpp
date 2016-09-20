@@ -36,7 +36,7 @@ bool RenderGeo::startup()
 
 	//makePlane();
 	makeShader();
-	makeSphere(25, 25, 5);
+	makeSphere(10, 10, 5);
 
 	return true;
 }
@@ -171,34 +171,41 @@ std::vector<vec4> RenderGeo::makeHalfCircle(int numPoints, float radius)
 	std::vector<vec4> halfCircle;
 	for (int i = 0; i < numPoints; i++)
 	{
-		angle = glm::pi<float>() * i / numPoints - 1;
+		angle = glm::pi<float>() * i / (numPoints - 1);
 		vec4 pos = vec4(cos(angle) * radius, sin(angle) * radius, 0, 1);
 		halfCircle.push_back(pos);
 	}
 	return halfCircle;
 }
 
-const int numIndices = 25;
 
 void RenderGeo::makeSphere(int numPoints, int numMeridians, float radius)
 {
-	unsigned int indices[numIndices];
-	for (int i = 0; i < numIndices; i++)
+	int counter = numPoints;
+	pi = glm::pi<float>();
+	std::vector<vec4> vertices = makeHalfCircle(numPoints, radius);
+
+	for (int i = 1; i < numMeridians; i++)
+	{ 
+		phi = 2 * pi * i / numMeridians;
+		for (int j = 0; j < numPoints; j++, counter++)
+		{
+			newX = vertices[j].x;
+			newY = vertices[j].y * cos(phi) - vertices[j].z * sin(phi);
+			newZ = vertices[j].z * cos(phi) + vertices[j].y * sin(phi);
+
+			vertices.push_back(vec4(newX, newY, newZ, 1));
+		}
+	}
+
+	unsigned int* indices = new unsigned int[vertices.size()];
+	indexCount = vertices.size();
+
+	for (int i = 0; i < vertices.size(); i++)
 	{
 		indices[i] = i;
 	}
-	indexCount = numIndices;
-	
-	std::vector<vec4> vertices = makeHalfCircle(numPoints, radius);
 
-	for (int i = 0; i < numMeridians; i++)
-	{
-		angle = (2 * glm::pi<float>()) * i / numMeridians;
-		for (int j = 0; j < numPoints; j++)
-		{
-			vertices[j].x = cos(angle) + vertices[j].z * sin(angle);
-		}
-	}
 
 	//generate our GL buffers, making our handles
 	glGenBuffers(1, &VBO);
@@ -211,7 +218,7 @@ void RenderGeo::makeSphere(int numPoints, int numMeridians, float radius)
 	//bind the vertex buffer handle
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	//put the vertex info on the card
-	glBufferData(GL_ARRAY_BUFFER, numPoints * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 20 * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
 	//bind the index buffer handle 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
