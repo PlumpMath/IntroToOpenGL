@@ -4,6 +4,30 @@ RenderGeo::RenderGeo()
 {
 }
 
+
+std::string loadFile(char fileName[])
+{
+	std::ifstream f;
+
+	std::string fileData, FullData;
+
+	f.open(fileName, std::ios::in | std::ios::_Nocreate);
+	if (f.is_open())
+	{
+		while (!f.eof())
+		{
+			std::getline(f, fileData);
+			FullData += "\n" + fileData;
+		}
+
+	}
+
+	f.close();
+
+	return FullData;
+}
+
+
 bool RenderGeo::startup()
 {
 
@@ -36,6 +60,7 @@ bool RenderGeo::startup()
 
 	//makePlane();
 	makeShader();
+	
 	makeSphere(10, 10, 5);
 
 	return true;
@@ -45,9 +70,6 @@ bool RenderGeo::update()
 {
 	if (glfwWindowShouldClose(window) == false && glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS)
 	{
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
-
 		return true;
 	}
 	return false;
@@ -61,7 +83,8 @@ void RenderGeo::draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glUseProgram(programID);
-	unsigned int projectionViewUniform = glGetUniformLocation(programID, "projectionViewWorldMatrix");
+	
+	int projectionViewUniform = glGetUniformLocation(programID, "projectionViewWorldMatrix");
 	glUniformMatrix4fv(projectionViewUniform, 1, false, glm::value_ptr(projectionViewMatrix));
 
 	glBindVertexArray(VAO);
@@ -81,17 +104,26 @@ void RenderGeo::shutdown()
 void RenderGeo::makeShader()
 {
 	// create shaders
+	
+	//std::string vertString = readFile("vert.vert");
+	//const char* vsSource = vertString.c_str();
+
+	//std::string fragString = readFile("frag.frag");
+	//const char* fsSource = fragString.c_str();
+
 	const char* vsSource = "#version 410\n \
-	layout(location=0) in vec4 position; \
-	layout(location=1) in vec4 colour; \
-	out vec4 vColour; \
-	uniform mat4 projectionViewWorldMatrix; \
-	void main() { vColour = colour; gl_Position = projectionViewWorldMatrix * position;}";
+							layout(location=0) in vec4 Position; \
+							layout(location=1) in vec4 Colour; \
+							out vec4 vColour; \
+							uniform mat4 ProjectionViewWorld; \
+							void main() { vColour = Colour; \
+							gl_Position = ProjectionViewWorld * Position; }";
 
 	const char* fsSource = "#version 410\n \
-	in vec4 vColour; \
-	out vec4 fragColor; \
-	void main() { fragColor = vColour; }";
+							in vec4 vColour; \
+							out vec4 FragColor; \
+							void main() { FragColor = vColour; }";
+
 
 	int success = GL_FALSE;
 	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -132,10 +164,10 @@ void RenderGeo::makePlane()
 	vertices[2].position = vec4(-5, 0, 5, 1);
 	vertices[3].position = vec4(5, 0, 5, 1);
 
-	vertices[0].color = vec4(1, 0, 0, 1);
-	vertices[1].color = vec4(0, 1, 0, 1);
-	vertices[2].color = vec4(0, 0, 1, 1);
-	vertices[3].color = vec4(1, 1, 1, 1);
+	vertices[0].colour = vec4(1, 0, 0, 1);
+	vertices[1].colour = vec4(0, 1, 0, 1);
+	vertices[2].colour = vec4(0, 0, 1, 1);
+	vertices[3].colour = vec4(1, 1, 1, 1);
 
 	// Generate our GL buffers, making our handles
 	glGenBuffers(1, &VBO);
@@ -166,46 +198,52 @@ void RenderGeo::makePlane()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-std::vector<vec4> RenderGeo::makeHalfCircle(int numPoints, float radius)
+Vertex* RenderGeo::makeHalfCircle(const int numPoints, const int radius)
 {
-	std::vector<vec4> halfCircle;
+	Vertex* halfCircle = new Vertex[numPoints];
 	for (int i = 0; i < numPoints; i++)
 	{
-		angle = glm::pi<float>() * i / (numPoints - 1);
-		vec4 pos = vec4(cos(angle) * radius, sin(angle) * radius, 0, 1);
-		halfCircle.push_back(pos);
+		float angle = glm::pi<float>() * i / (numPoints - 1);
+		halfCircle[i].position = vec4(cos(angle) * radius, sin(angle) * radius, 0, 1);
 	}
 	return halfCircle;
 }
 
-
-void RenderGeo::makeSphere(int numPoints, int numMeridians, float radius)
+Vertex* RenderGeo::makeSphereVerts(const int numPoints, const int numMeridians, Vertex* vertices)
 {
-	int counter = numPoints;
-	pi = glm::pi<float>();
-	std::vector<vec4> vertices = makeHalfCircle(numPoints, radius);
+	int counter = 0;
+	Vertex* sphereVerts = new Vertex[numPoints*numMeridians];
 
-	for (int i = 1; i < numMeridians; i++)
-	{ 
-		phi = 2 * pi * i / numMeridians;
+	for (int i = 0; i < numMeridians; i++)
+	{
+		phi = 2 * glm::pi<float>() * i / numMeridians;
 		for (int j = 0; j < numPoints; j++, counter++)
 		{
-			newX = vertices[j].x;
-			newY = vertices[j].y * cos(phi) - vertices[j].z * sin(phi);
-			newZ = vertices[j].z * cos(phi) + vertices[j].y * sin(phi);
+			newX = vertices[j].position.x;
+			newY = vertices[j].position.y * cos(phi) - vertices[j].position.z * sin(phi);
+			newZ = vertices[j].position.z * cos(phi) + vertices[j].position.y * sin(phi);
 
-			vertices.push_back(vec4(newX, newY, newZ, 1));
+			vertices[counter].position = vec4(newX, newY, newZ, 1);
 		}
 	}
+	return sphereVerts;
+}
 
-	unsigned int* indices = new unsigned int[vertices.size()];
-	indexCount = vertices.size();
+void RenderGeo::makeSphere(const int numPoints, const int numMeridians, const int radius)
+{
+	unsigned int totalVerts = numPoints * numMeridians;
 
-	for (int i = 0; i < vertices.size(); i++)
+	Vertex* vertices = new Vertex[totalVerts];
+
+	vertices = makeHalfCircle(numPoints, radius);
+	vertices = makeSphereVerts(numPoints, numMeridians, vertices);
+
+	unsigned int* indices = new unsigned int[totalVerts];
+	indexCount = totalVerts;
+	for (int i = 0; i < numPoints; i++)
 	{
 		indices[i] = i;
 	}
-
 
 	//generate our GL buffers, making our handles
 	glGenBuffers(1, &VBO);
@@ -218,7 +256,7 @@ void RenderGeo::makeSphere(int numPoints, int numMeridians, float radius)
 	//bind the vertex buffer handle
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	//put the vertex info on the card
-	glBufferData(GL_ARRAY_BUFFER, 20 * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, totalVerts * sizeof(Vertex), vertices, GL_STATIC_DRAW);
 
 	//bind the index buffer handle 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
@@ -238,3 +276,21 @@ void RenderGeo::makeSphere(int numPoints, int numMeridians, float radius)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
+
+//std::string RenderGeo::readFile(std::string text)
+//{
+//	std::string line;
+//	std::string shader;
+//	std::ifstream iFile(text);
+//
+//	if (iFile.is_open())
+//	{
+//		while (std::getline(iFile, line))
+//		{
+//			shader += line + "\n";
+//		}
+//		iFile.close();
+//	}
+//	return shader;
+//}
+

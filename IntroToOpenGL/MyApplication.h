@@ -9,6 +9,7 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
+
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
@@ -20,6 +21,12 @@ public:
 	virtual bool update() = 0;
 	virtual void draw() = 0;
 	virtual void shutdown() = 0;
+};
+
+struct Vertex 
+{
+	vec4 position;
+	vec4 colour;
 };
 
 class SolarSystem : public Application
@@ -49,12 +56,6 @@ private:
 	vec3 moonOffset = vec3(3, 0, 0); // distance of moon from earth
 };
 
-struct Vertex 
-{
-	vec4 position;
-	vec4 color;
-};
-
 class RenderGeo : public Application
 {
 public :
@@ -65,11 +66,12 @@ public :
 	void shutdown() override;
 	void makeShader();
 	void makePlane();
-	std::vector<vec4> makeHalfCircle(int, float);
-	void makeSphere(int, int, float);
+	Vertex* makeHalfCircle(const int, const int);
+	Vertex* makeSphereVerts(const int, const int, Vertex*);
+	void makeSphere(const int, const int, const int);
+	//std::string readFile(std::string text);
 	
 private:
-
 	mat4 projection;
 	mat4 view;
 	mat4 projectionViewMatrix;
@@ -80,14 +82,30 @@ private:
 	unsigned int indexCount;
 	unsigned int programID; // resulting ID of compiled shader
 	float time;
-	float angle;
-	float pi;
+	float radius;
 	float phi;
-	float oldX;
-	float oldY;
-	float oldZ;
 	float newX;
 	float newY;
 	float newZ;
-	float radius;
+};
+
+class Textures : public Application
+{
+public:
+	Textures();
+	bool startup() override;
+	bool update() override;
+	void draw() override;
+	void shutdown() override;
+
+private:
+	mat4 projection;
+	mat4 view;
+	mat4 projectionViewMatrix;
+	GLFWwindow* window;
+	unsigned int VAO; // vertex array object
+	unsigned int VBO; // vertex buffer object
+	unsigned int IBO; // index buffer object
+	unsigned int texture;
+	unsigned int program;
 };

@@ -73,7 +73,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)dep\glm;$(SolutionDir)dep\glfw\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)dep\glm;$(SolutionDir)dep\glfw\include;$(SolutionDir)IntroToOpenGL;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\dep\glfw\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -123,6 +123,7 @@
     <ClInclude Include="MyApplication.h" />
     <ClInclude Include="src\Gizmos.h" />
     <ClInclude Include="src\gl_core_4_4.h" />
+    <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -130,6 +131,11 @@
     <ClCompile Include="RenderGeometry.cpp" />
     <ClCompile Include="src\Gizmos.cpp" />
     <ClCompile Include="src\gl_core_4_4.c" />
+    <ClCompile Include="Textures.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="frag.frag" />
+    <None Include="vert.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
