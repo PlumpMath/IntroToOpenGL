@@ -37,7 +37,7 @@ bool Textures::startup()
 	glEnable(GL_DEPTH_TEST); // enables the depth buffer
 
 	int imageWidth = 0, imageHeight = 0, imageFormat = 0;
-	unsigned char* data = stbi_load("$(SolutionDir)IntroToOpenGL/crate.png", &imageWidth, &imageHeight, &imageFormat, STBI_default); // read in default texel data for image
+	unsigned char* data = stbi_load("./crate.png", &imageWidth, &imageHeight, &imageFormat, STBI_default); // read in default texel data for image
 
 	glGenTextures(1, &texture); // generate OpenGL texture handle
 	glBindTexture(GL_TEXTURE_2D, texture); // bind the texture to correct dimension slot, 2D in this case
@@ -69,10 +69,10 @@ bool Textures::startup()
 	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShader, 1, (const char**)&fsSource, 0);
 	glCompileShader(fragmentShader);
-	program = glCreateProgram();
-	glAttachShader(program, vertexShader);
-	glAttachShader(program, fragmentShader);
-	glLinkProgram(program);
+	programID = glCreateProgram();
+	glAttachShader(programID, vertexShader);
+	glAttachShader(programID, fragmentShader);
+	glLinkProgram(programID);
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
@@ -81,8 +81,8 @@ bool Textures::startup()
 	{
 	   -5, 0, 5, 1, 0, 1,
 		5, 0, 5, 1, 1, 1,
-		5, 0, -5, 1, 1, 0,
-	   -5, 0, -5, 1, 0, 0,
+		5, 0,-5, 1, 1, 0,
+	   -5, 0,-5, 1, 0, 0,
 	};
 	unsigned int indexData[] = 
 	{
@@ -122,18 +122,18 @@ void Textures::draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // use our texture program
-	glUseProgram(program);
+	glUseProgram(programID);
 
 	// bind the camera
-	int projectionViewUniform = glGetUniformLocation(program, "projectionViewWorldMatrix");
-	glUniformMatrix4fv(projectionViewUniform, 1, false, glm::value_ptr(projectionViewMatrix));
+	int projectionViewUniform = glGetUniformLocation(programID, "ProjectionView");
+	glUniformMatrix4fv(projectionViewUniform, 1, GL_FALSE, glm::value_ptr(projectionViewMatrix));
 
 	// set texture slot
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	// tell the shader where it is
-	projectionViewUniform = glGetUniformLocation(program, "diffuse");
+	projectionViewUniform = glGetUniformLocation(programID, "diffuse");
 	glUniform1i(projectionViewUniform, 0);
 
 	// draw

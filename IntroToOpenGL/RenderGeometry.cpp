@@ -4,30 +4,6 @@ RenderGeo::RenderGeo()
 {
 }
 
-
-std::string loadFile(char fileName[])
-{
-	std::ifstream f;
-
-	std::string fileData, FullData;
-
-	f.open(fileName, std::ios::in | std::ios::_Nocreate);
-	if (f.is_open())
-	{
-		while (!f.eof())
-		{
-			std::getline(f, fileData);
-			FullData += "\n" + fileData;
-		}
-
-	}
-
-	f.close();
-
-	return FullData;
-}
-
-
 bool RenderGeo::startup()
 {
 
@@ -58,10 +34,11 @@ bool RenderGeo::startup()
 	glClearColor(0.25f, .25f, 0.25f, 1);
 	glEnable(GL_DEPTH_TEST); // enables the depth buffer
 
-	//makePlane();
-	makeShader();
 	
-	makeSphere(10, 10, 5);
+	makeShader();
+	makePlane();
+
+	//makeSphere(10, 10, 5);
 
 	return true;
 }
@@ -89,7 +66,7 @@ void RenderGeo::draw()
 
 	glBindVertexArray(VAO);
 	glPointSize(5.f);
-	glDrawElements(GL_POINTS, indexCount, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLE_STRIP, indexCount, GL_UNSIGNED_INT, 0);
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();
@@ -293,4 +270,22 @@ void RenderGeo::makeSphere(const int numPoints, const int numMeridians, const in
 //	}
 //	return shader;
 //}
+
+std::string loadFile(char fileName[])
+{
+	std::ifstream f;
+	std::string fileData, FullData;
+	f.open(fileName, std::ios::in | std::ios::_Nocreate);
+
+	if (f.is_open())
+	{
+		while (!f.eof())
+		{
+			std::getline(f, fileData);
+			FullData += "\n" + fileData;
+		}
+	}
+	f.close();
+	return FullData;
+}
 

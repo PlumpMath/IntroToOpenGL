@@ -97,6 +97,8 @@ public:
 	bool update() override;
 	void draw() override;
 	void shutdown() override;
+	void makeShader();
+	void makePlane();
 
 private:
 	mat4 projection;
@@ -106,6 +108,7 @@ private:
 	unsigned int VAO; // vertex array object
 	unsigned int VBO; // vertex buffer object
 	unsigned int IBO; // index buffer object
+	unsigned int indexCount;
 	unsigned int texture;
-	unsigned int program;
+	unsigned int programID;
 };
