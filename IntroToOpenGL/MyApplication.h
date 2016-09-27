@@ -29,6 +29,14 @@ struct Vertex
 	vec4 colour;
 };
 
+struct AdvancedVertex 
+{
+	float x, y, z, w;
+	float nx, ny, nz, nw;
+	float tx, ty, tz, tw;
+	float s, t;
+};
+
 class SolarSystem : public Application
 {
 public:
@@ -97,8 +105,6 @@ public:
 	bool update() override;
 	void draw() override;
 	void shutdown() override;
-	void makeShader();
-	void makePlane();
 
 private:
 	mat4 projection;
@@ -110,5 +116,6 @@ private:
 	unsigned int IBO; // index buffer object
 	unsigned int indexCount;
 	unsigned int texture;
+	unsigned int normal;
 	unsigned int programID;
 };
