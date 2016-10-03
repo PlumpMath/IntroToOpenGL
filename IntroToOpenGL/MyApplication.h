@@ -9,7 +9,7 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
-
+using glm::vec2;
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
@@ -114,8 +114,28 @@ private:
 	unsigned int VAO; // vertex array object
 	unsigned int VBO; // vertex buffer object
 	unsigned int IBO; // index buffer object
-	unsigned int indexCount;
 	unsigned int texture;
 	unsigned int normal;
+	unsigned int programID;
+};
+
+class ProcGen : public Application
+{
+public:
+	ProcGen();
+	bool startup() override;
+	bool update() override;
+	void draw() override;
+	void shutdown() override;
+
+private:
+	mat4 projection;
+	mat4 view;
+	mat4 projectionViewMatrix;
+	GLFWwindow* window;
+	unsigned int VAO; // vertex array object
+	unsigned int VBO; // vertex buffer object
+	unsigned int IBO; // index buffer object
+	unsigned int perlinTexture;
 	unsigned int programID;
 };
