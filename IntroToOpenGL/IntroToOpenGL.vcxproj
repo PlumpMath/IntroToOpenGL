@@ -127,7 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MyApplication.cpp" />
+    <ClCompile Include="SolarSystem.cpp" />
     <ClCompile Include="ProceduralGeneration.cpp" />
     <ClCompile Include="RenderGeometry.cpp" />
     <ClCompile Include="src\Gizmos.cpp" />
