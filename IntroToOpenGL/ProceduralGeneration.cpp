@@ -56,7 +56,8 @@ bool ProcGen::startup()
 				amplitude *= persistence;
 			}
 		}
-	}
+	}
+
 	glGenTextures(1, &perlinTexture);
 	glBindTexture(GL_TEXTURE_2D, perlinTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, 64, 64, 0, GL_RED, GL_FLOAT, perlinData);
