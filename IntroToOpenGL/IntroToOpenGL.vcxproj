@@ -126,6 +126,7 @@
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SolarSystem.cpp" />
     <ClCompile Include="ProceduralGeneration.cpp" />

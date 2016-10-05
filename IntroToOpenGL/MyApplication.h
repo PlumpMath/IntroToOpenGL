@@ -64,6 +64,29 @@ private:
 	vec3 moonOffset = vec3(3, 0, 0); // distance of moon from earth
 };
 
+class Camera : public Application
+{
+public:
+	Camera();
+	bool startup() override;
+	bool update() override;
+	void draw() override;
+	void shutdown() override;
+	void makePlane();
+	void makeShader();
+
+private:
+	mat4 projection;
+	mat4 view;
+	mat4 projectionViewMatrix;
+	GLFWwindow* window;
+	unsigned int VAO; // vertex array object
+	unsigned int VBO; // vertex buffer object
+	unsigned int IBO; // index buffer object
+	unsigned int indexCount; // number of indices
+	unsigned int programID; // resulting ID of compiled shader
+};
+
 class RenderGeo : public Application
 {
 public :

@@ -61,7 +61,7 @@ void RenderGeo::draw()
 
 	glUseProgram(programID);
 	
-	int projectionViewUniform = glGetUniformLocation(programID, "projectionViewWorldMatrix");
+	int projectionViewUniform = glGetUniformLocation(programID, "ProjectionViewWorld");
 	glUniformMatrix4fv(projectionViewUniform, 1, false, glm::value_ptr(projectionViewMatrix));
 
 	glBindVertexArray(VAO);
