@@ -4,9 +4,9 @@ int main()
 {
 	
 	Application* theApp = new SolarSystem();
-	//std::cout << "1. For Solar System \n2. For Camera Application \n3. For Rendering Geometry \n4. For Textures \n5. For Procedural Generation";
-	int input = 2;
-	//std::cin >> input;
+	std::cout << "1. For Solar System \n2. For Camera Application \n3. For Rendering Geometry \n4. For Textures \n5. For Procedural Generation \n";
+	int input = 3;
+	std::cin >> input;
 
 
 	switch (input)
