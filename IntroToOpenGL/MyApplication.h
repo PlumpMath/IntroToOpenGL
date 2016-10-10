@@ -8,6 +8,7 @@
 #include "src/Gizmos.h"
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
+#include <Camera.h>
 
 using glm::vec2;
 using glm::vec3;
@@ -64,27 +65,23 @@ private:
 	vec3 moonOffset = vec3(3, 0, 0); // distance of moon from earth
 };
 
-class Camera : public Application
+class CameraApplication : public Application
 {
 public:
-	Camera();
+	CameraApplication();
 	bool startup() override;
 	bool update() override;
 	void draw() override;
 	void shutdown() override;
-	void makePlane();
-	void makeShader();
 
 private:
-	mat4 projection;
-	mat4 view;
-	mat4 projectionViewMatrix;
 	GLFWwindow* window;
-	unsigned int VAO; // vertex array object
-	unsigned int VBO; // vertex buffer object
-	unsigned int IBO; // index buffer object
-	unsigned int indexCount; // number of indices
-	unsigned int programID; // resulting ID of compiled shader
+	FlyCamera myCamera;
+	vec4 white;
+	vec4 black;
+	float previousTime = 0;
+	float currentTime;
+	float deltaTime;
 };
 
 class RenderGeo : public Application

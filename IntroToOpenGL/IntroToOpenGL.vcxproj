@@ -120,6 +120,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="MyApplication.h" />
     <ClInclude Include="src\Gizmos.h" />
     <ClInclude Include="src\gl_core_4_4.h" />
@@ -127,6 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CameraApplication.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SolarSystem.cpp" />
     <ClCompile Include="ProceduralGeneration.cpp" />
